@@ -1,0 +1,15 @@
+{
+  "scripts": {
+    "start": "npm run build && npm --prefix GymAI/backend start",
+    "dev": "npm --prefix GymAI run dev -- --host 127.0.0.1",
+    "dev:full": "npm run start",
+    "api": "npm --prefix GymAI/backend start",
+    "build": "npm --prefix GymAI run build",
+    "preview": "npm --prefix GymAI run preview -- --host 127.0.0.1"
+  },
+  "dependencies": {
+    "autoprefixer": "^10.5.0",
+    "postcss": "^8.5.12",
+    "tailwindcss": "^4.2.4"
+  }
+}
