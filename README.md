@@ -1,112 +1,73 @@
-# School Clinic EMR System (IPO-Based)
+# React + TypeScript + Vite
 
-Fully functional thesis-ready Web-Based School Clinic Management System using the IPO model:
+This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
 
-- **Input:** Student registration, patient forms, visit forms, feedback forms
-- **Process:** Validation, CRUD processing, AI decision tree inference, auth/token verification
-- **Output:** EMR records, visit history, AI classification, analytics dashboard, health insights
-- **Feedback:** Rating + comment collection, stored in DB, visible to admin
+Currently, two official plugins are available:
 
-## Tech Stack
+- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
+- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
 
-- Frontend: React + TypeScript + Vite + Tailwind CSS + Recharts
-- Backend: Flask + Flask-CORS + PyJWT + bcrypt
-- AI Engine: scikit-learn DecisionTreeClassifier + joblib
-- Database: SQLite (`clinic_v2.db`)
+## React Compiler
 
-## User Roles (Strict)
+The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
 
-- **Admin** (default seeded account)
-- **Student** (registers via UI)
+## Expanding the ESLint configuration
 
-## Project Structure
+If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
 
-```text
-CLINIC/
-  frontend/
-    src/
-      components/ProtectedRoute.tsx
-      contexts/AuthContext.tsx
-      pages/
-        LoginPage.tsx
-        RegisterPage.tsx
-        AdminDashboardPage.tsx
-        StudentDashboardPage.tsx
-      api.ts
-      App.tsx
-      main.tsx
-      types.ts
-  backend/
-    app.py
-    db.py
-    ai_model.py
-    schema.sql
-    requirements.txt
-  ai-engine/
-    train.py
-    model.pkl
-    metrics.pkl
+```js
+export default defineConfig([
+  globalIgnores(['dist']),
+  {
+    files: ['**/*.{ts,tsx}'],
+    extends: [
+      // Other configs...
+
+      // Remove tseslint.configs.recommended and replace with this
+      tseslint.configs.recommendedTypeChecked,
+      // Alternatively, use this for stricter rules
+      tseslint.configs.strictTypeChecked,
+      // Optionally, add this for stylistic rules
+      tseslint.configs.stylisticTypeChecked,
+
+      // Other configs...
+    ],
+    languageOptions: {
+      parserOptions: {
+        project: ['./tsconfig.node.json', './tsconfig.app.json'],
+        tsconfigRootDir: import.meta.dirname,
+      },
+      // other options...
+    },
+  },
+])
 ```
 
-## API Endpoints
+You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
 
-- AUTH: `POST /login`, `POST /register`, `GET /me`
-- PATIENTS: `POST /patients`, `GET /patients`, `GET /patients/<id>`, `PUT /patients/<id>`, `DELETE /patients/<id>`
-- VISITS: `POST /visits`, `GET /visits`, `PUT /visits/<id>`, `DELETE /visits/<id>`
-- AI: `POST /classify`
-- REPORTS: `GET /reports`
-- FEEDBACK: `POST /feedback`, `GET /feedback`
+```js
+// eslint.config.js
+import reactX from 'eslint-plugin-react-x'
+import reactDom from 'eslint-plugin-react-dom'
 
-## Database Schema
-
-- `users(id, username, password, role, patient_id)`
-- `patients(id, name, age, gender, grade_level, medical_history, allergies)`
-- `visits(id, patient_id, symptoms, temperature, notes, diagnosis, classification, date)`
-- `feedback(id, user_id, rating, comment, created_at)`
-
-See `backend/schema.sql`.
-
-## Setup Guide (Step-by-Step)
-
-### 1) Train AI model
-
-```bash
-cd ai-engine
-python train.py
+export default defineConfig([
+  globalIgnores(['dist']),
+  {
+    files: ['**/*.{ts,tsx}'],
+    extends: [
+      // Other configs...
+      // Enable lint rules for React
+      reactX.configs['recommended-typescript'],
+      // Enable lint rules for React DOM
+      reactDom.configs.recommended,
+    ],
+    languageOptions: {
+      parserOptions: {
+        project: ['./tsconfig.node.json', './tsconfig.app.json'],
+        tsconfigRootDir: import.meta.dirname,
+      },
+      // other options...
+    },
+  },
+])
 ```
-
-### 2) Run backend API
-
-```bash
-cd backend
-pip install -r requirements.txt
-python app.py
-```
-
-Backend URL: `http://127.0.0.1:5051`
-
-### 3) Run frontend UI
-
-```bash
-cd frontend
-npm install
-npm run dev
-```
-
-Frontend URL: `http://localhost:5188`
-
-## Login Credentials
-
-- Admin: `admin / admin123`
-- Student: register via `/register`, then login
-
-## Implemented Analytics
-
-- Total patients
-- Total visits
-- Most common illness
-- Condition distribution (bar chart)
-- Mean visits per patient
-- AI accuracy rate
-- Peak visits day
-- Health insight sentence
